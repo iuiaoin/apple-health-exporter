@@ -325,7 +325,7 @@
           "editorMode": "code",
           "format": "time_series",
           "rawQuery": true,
-          "rawSql": "SELECT\n  COALESCE(SUM((data ->> 'qty') :: float), 0) AS step,\n  generate_series(\n    date_trunc('day', min(timestamp)),\n    date_trunc('day', max(timestamp)),\n    '1 day' :: interval\n  ) AS time\nFROM\n  metrics\nWHERE\n  name = 'step_count'\n  AND \"timestamp\" > ($__timeFrom()::timestamp + interval '8 hours')\n  AND \"timestamp\" < ($__timeTo()::timestamp + interval '8 hours')\nGROUP BY\n  date_trunc('day', timestamp)\nORDER BY\n  time;",
+          "rawSql": "SELECT\n  COALESCE(SUM((data ->> 'qty') :: float), 0) AS step,\n  generate_series(\n    date_trunc('day', min(timestamp)),\n    date_trunc('day', max(timestamp)),\n    '1 day' :: interval\n  ) AS time\nFROM\n  metrics\nWHERE\n  name = 'step_count'\n  AND \"timestamp\" < ($__timeTo()::timestamp + interval '8 hours')\n  AND \"timestamp\" > \n    CASE \n      WHEN $__timeTo()::timestamp - $__timeFrom()::timestamp >= interval '24 hours' \n      THEN date_trunc('day', $__timeFrom()::timestamp + interval '8 hours' + interval '1 day')\n      ELSE $__timeFrom()::timestamp + interval '8 hours'\n    END\nGROUP BY\n  date_trunc('day', timestamp)\nORDER BY\n  time;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -2324,6 +2324,6 @@
   "timezone": "",
   "title": "Declan-Health",
   "uid": "e8491a61-cdac-4398-bf19-68c1c300c98f",
-  "version": 8,
+  "version": 9,
   "weekStart": ""
 }
