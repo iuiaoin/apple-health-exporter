@@ -294,7 +294,7 @@
             "properties": [
               {
                 "id": "unit",
-                "value": "time: dddd"
+                "value": "time: MM/DD"
               }
             ]
           }
@@ -715,7 +715,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -832,7 +833,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -928,7 +930,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1061,7 +1064,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1168,7 +1172,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1264,7 +1269,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -2324,6 +2330,6 @@
   "timezone": "",
   "title": "Declan-Health",
   "uid": "e8491a61-cdac-4398-bf19-68c1c300c98f",
-  "version": 12,
+  "version": 13,
   "weekStart": ""
 }
