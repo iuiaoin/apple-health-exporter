@@ -46,7 +46,10 @@
             "insertNulls": false,
             "lineInterpolation": "smooth",
             "lineStyle": {
-              "dash": [10, 10],
+              "dash": [
+                10,
+                10
+              ],
               "fill": "dash"
             },
             "lineWidth": 1,
@@ -82,8 +85,8 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 14,
-        "w": 8,
+        "h": 12,
+        "w": 7,
         "x": 0,
         "y": 0
       },
@@ -179,9 +182,9 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 14,
-        "w": 8,
-        "x": 8,
+        "h": 12,
+        "w": 7,
+        "x": 7,
         "y": 0
       },
       "id": 4,
@@ -241,10 +244,7 @@
       "type": "barchart"
     },
     {
-      "datasource": {
-        "type": "postgres",
-        "uid": "a98e0ff2-140d-4677-a14f-6896e5cb4e71"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -288,9 +288,9 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 14,
+        "h": 12,
         "w": 8,
-        "x": 16,
+        "x": 14,
         "y": 0
       },
       "id": 7,
@@ -325,7 +325,7 @@
           "editorMode": "code",
           "format": "time_series",
           "rawQuery": true,
-          "rawSql": "SELECT\n  COALESCE(SUM((data ->> 'qty') :: float), 0) AS step,\n  generate_series(\n    date_trunc('day', min(timestamp)),\n    date_trunc('day', max(timestamp)),\n    '1 day' :: interval\n  ) AS time\nFROM\n  metrics\nWHERE\n  name = 'step_count'\n  AND \"timestamp\" > ($__timeFrom()::timestamp + interval '8 hours')\n  AND \"timestamp\" < ($__timeTo()::timestamp + interval '8 hours')\nGROUP BY\n  date_trunc('day', timestamp)\nORDER BY\n  time;",
+          "rawSql": "SELECT\n  COALESCE(SUM((data ->> 'qty') :: float), 0) AS step,\n  generate_series(\n    date_trunc('day', min(timestamp)),\n    date_trunc('day', max(timestamp)),\n    '1 day' :: interval\n  ) AS time\nFROM\n  metrics\nWHERE\n  name = 'step_count'\n  AND \"timestamp\" > $__timeFrom()\n  AND \"timestamp\" < $__timeTo()\nGROUP BY\n  date_trunc('day', timestamp)\nORDER BY\n  time;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -348,327 +348,6 @@
       ],
       "title": "步数",
       "type": "barchart"
-    },
-    {
-      "datasource": {},
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "fillOpacity": 80,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineWidth": 1,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 13,
-        "w": 8,
-        "x": 0,
-        "y": 14
-      },
-      "id": 16,
-      "options": {
-        "barRadius": 0,
-        "barWidth": 0.97,
-        "fullHighlight": false,
-        "groupWidth": 0.7,
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "orientation": "auto",
-        "showValue": "auto",
-        "stacking": "none",
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        },
-        "xTickLabelRotation": 0,
-        "xTickLabelSpacing": 0
-      },
-      "pluginVersion": "10.2.0-60477",
-      "targets": [
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "ba8c639a-57c5-41cf-a0cf-1b2463323d66"
-          },
-          "editorMode": "code",
-          "format": "time_series",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  COALESCE(SUM((data ->> 'qty') :: float), 0) AS floor,\n  generate_series(\n    date_trunc('day', min(timestamp)),\n    date_trunc('day', max(timestamp)),\n    '1 day' :: interval\n  ) AS time\nFROM\n  metrics\nWHERE\n  name = 'flights_climbed'\n  AND \"timestamp\" > $__timeFrom()\n  AND \"timestamp\" < $__timeTo()\nGROUP BY\n  date_trunc('day', timestamp)\nORDER BY\n  time;",
-          "refId": "A",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "limit": 50
-          }
-        }
-      ],
-      "title": "攀登楼层数",
-      "type": "barchart"
-    },
-    {
-      "datasource": {},
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "left",
-            "fillOpacity": 80,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineWidth": 1,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "green",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 13,
-        "w": 8,
-        "x": 8,
-        "y": 14
-      },
-      "id": 26,
-      "options": {
-        "barRadius": 0,
-        "barWidth": 0.8,
-        "fullHighlight": false,
-        "groupWidth": 0.7,
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "right",
-          "showLegend": true
-        },
-        "orientation": "auto",
-        "showValue": "auto",
-        "stacking": "none",
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        },
-        "xField": "Time",
-        "xTickLabelRotation": 0,
-        "xTickLabelSpacing": -200
-      },
-      "pluginVersion": "10.2.0-60477",
-      "targets": [
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "ba8c639a-57c5-41cf-a0cf-1b2463323d66"
-          },
-          "editorMode": "code",
-          "format": "time_series",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  COALESCE(SUM((data ->> 'qty') :: float), 0) AS calorie,\n  generate_series(\n    date_trunc('day', min(timestamp)),\n    date_trunc('day', max(timestamp)),\n    '1 day' :: interval\n  ) AS time\nFROM\n  metrics\nWHERE\n  name = 'active_energy'\n  AND \"timestamp\" > $__timeFrom()\n  AND \"timestamp\" < $__timeTo()\nGROUP BY\n  date_trunc('day', timestamp)\nORDER BY\n  time;",
-          "refId": "A",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "limit": 50
-          }
-        }
-      ],
-      "title": "消耗能量",
-      "type": "barchart"
-    },
-    {
-      "datasource": {},
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 13,
-        "w": 8,
-        "x": 16,
-        "y": 14
-      },
-      "id": 21,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "10.2.0-60477",
-      "targets": [
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "ba8c639a-57c5-41cf-a0cf-1b2463323d66"
-          },
-          "editorMode": "code",
-          "format": "time_series",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  COALESCE(SUM((data ->> 'qty') :: float), 0) AS value,\n  generate_series(\n    date_trunc('day', min(timestamp)),\n    date_trunc('day', max(timestamp)),\n    '1 day' :: interval\n  ) AS time\nFROM\n  metrics\nWHERE\n  name = 'basal_energy_burned'\n  AND \"timestamp\" > $__timeFrom()\n  AND \"timestamp\" < $__timeTo()\nGROUP BY\n  date_trunc('day', timestamp)\nORDER BY\n  time;",
-          "refId": "A",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "limit": 50
-          }
-        }
-      ],
-      "title": "基础能量消耗",
-      "type": "timeseries"
     },
     {
       "datasource": {},
@@ -718,7 +397,7 @@
         "h": 12,
         "w": 7,
         "x": 0,
-        "y": 27
+        "y": 12
       },
       "id": 10,
       "options": {
@@ -782,34 +461,23 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "custom": {
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
+            "axisPlacement": "left",
+            "fillOpacity": 80,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
-            "insertNulls": false,
-            "lineInterpolation": "smooth",
             "lineWidth": 1,
-            "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
             },
             "thresholdsStyle": {
               "mode": "off"
@@ -824,7 +492,7 @@
                 "value": null
               },
               {
-                "color": "red",
+                "color": "green",
                 "value": 80
               }
             ]
@@ -836,20 +504,30 @@
         "h": 12,
         "w": 7,
         "x": 7,
-        "y": 27
+        "y": 12
       },
-      "id": 13,
+      "id": 26,
       "options": {
+        "barRadius": 0,
+        "barWidth": 0.8,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom",
+          "placement": "right",
           "showLegend": true
         },
+        "orientation": "auto",
+        "showValue": "auto",
+        "stacking": "none",
         "tooltip": {
           "mode": "single",
           "sort": "none"
-        }
+        },
+        "xField": "Time",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": -200
       },
       "pluginVersion": "10.2.0-60477",
       "targets": [
@@ -861,7 +539,7 @@
           "editorMode": "code",
           "format": "time_series",
           "rawQuery": true,
-          "rawSql": "SELECT\n  COALESCE(AVG((data ->> 'qty') :: float), 0) AS kg,\n  generate_series(\n    date_trunc('day', min(timestamp)),\n    date_trunc('day', max(timestamp)),\n    '1 day' :: interval\n  ) AS time\nFROM\n  metrics\nWHERE\n  name = 'lean_body_mass'\n  AND \"timestamp\" > $__timeFrom()\n  AND \"timestamp\" < $__timeTo()\nGROUP BY\n  date_trunc('day', timestamp)\nORDER BY\n  time;",
+          "rawSql": "SELECT\n  COALESCE(SUM((data ->> 'qty') :: float), 0) AS calorie,\n  generate_series(\n    date_trunc('day', min(timestamp)),\n    date_trunc('day', max(timestamp)),\n    '1 day' :: interval\n  ) AS time\nFROM\n  metrics\nWHERE\n  name = 'active_energy'\n  AND \"timestamp\" > $__timeFrom()\n  AND \"timestamp\" < $__timeTo()\nGROUP BY\n  date_trunc('day', timestamp)\nORDER BY\n  time;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -882,8 +560,8 @@
           }
         }
       ],
-      "title": "去脂体重",
-      "type": "timeseries"
+      "title": "消耗能量",
+      "type": "barchart"
     },
     {
       "datasource": {},
@@ -933,7 +611,7 @@
         "h": 12,
         "w": 8,
         "x": 14,
-        "y": 27
+        "y": 12
       },
       "id": 25,
       "options": {
@@ -990,9 +668,15 @@
                   "properties": {
                     "field": "name",
                     "operator": "equal",
-                    "value": ["apple_exercise_time"],
-                    "valueSrc": ["value"],
-                    "valueType": ["text"]
+                    "value": [
+                      "apple_exercise_time"
+                    ],
+                    "valueSrc": [
+                      "value"
+                    ],
+                    "valueType": [
+                      "text"
+                    ]
                   },
                   "type": "rule"
                 }
@@ -1020,222 +704,7 @@
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 12,
-        "w": 7,
-        "x": 0,
-        "y": 39
-      },
-      "id": 19,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "10.2.0-60477",
-      "targets": [
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "ba8c639a-57c5-41cf-a0cf-1b2463323d66"
-          },
-          "editorMode": "code",
-          "format": "time_series",
-          "rawQuery": true,
-          "rawSql": "SELECT\n\t(data ->> 'qty')::float AS body_fat_percentage,\n\ttimestamp AS time\nFROM\n\tmetrics\nWHERE\n\tname = 'body_fat_percentage';",
-          "refId": "A",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "limit": 50
-          }
-        }
-      ],
-      "title": "体脂百分比",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {},
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 12,
-        "w": 7,
-        "x": 7,
-        "y": 39
-      },
-      "id": 2,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "10.2.0-60477",
-      "targets": [
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "ba8c639a-57c5-41cf-a0cf-1b2463323d66"
-          },
-          "editorMode": "code",
-          "format": "time_series",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  COALESCE(AVG((data ->> 'qty') :: float), 0) AS cm,\n  generate_series(\n    date_trunc('day', min(timestamp)),\n    date_trunc('day', max(timestamp)),\n    '1 day' :: interval\n  ) AS time\nFROM\n  metrics\nWHERE\n  name = 'walking_step_length'\n  AND \"timestamp\" > $__timeFrom()\n  AND \"timestamp\" < $__timeTo()\nGROUP BY\n  date_trunc('day', timestamp)\nORDER BY\n  time;",
-          "refId": "A",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "limit": 50
-          }
-        }
-      ],
-      "title": "步行步幅",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {},
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
+            "axisShow": false,
             "fillOpacity": 80,
             "gradientMode": "none",
             "hideFrom": {
@@ -1256,8 +725,221 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 7,
+        "x": 0,
+        "y": 24
+      },
+      "id": 16,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "10.2.0-60477",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "ba8c639a-57c5-41cf-a0cf-1b2463323d66"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  COALESCE(SUM((data ->> 'qty') :: float), 0) AS floor,\n  generate_series(\n    date_trunc('day', min(timestamp)),\n    date_trunc('day', max(timestamp)),\n    '1 day' :: interval\n  ) AS time\nFROM\n  metrics\nWHERE\n  name = 'flights_climbed'\n  AND \"timestamp\" > $__timeFrom()\n  AND \"timestamp\" < $__timeTo()\nGROUP BY\n  date_trunc('day', timestamp)\nORDER BY\n  time;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "攀登楼层数",
+      "type": "barchart"
+    },
+    {
+      "datasource": {},
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisShow": false,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 7,
+        "x": 7,
+        "y": 24
+      },
+      "id": 21,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.2.0-60477",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "ba8c639a-57c5-41cf-a0cf-1b2463323d66"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  COALESCE(SUM((data ->> 'qty') :: float), 0) AS value,\n  generate_series(\n    date_trunc('day', min(timestamp)),\n    date_trunc('day', max(timestamp)),\n    '1 day' :: interval\n  ) AS time\nFROM\n  metrics\nWHERE\n  name = 'basal_energy_burned'\n  AND \"timestamp\" > $__timeFrom()\n  AND \"timestamp\" < $__timeTo()\nGROUP BY\n  date_trunc('day', timestamp)\nORDER BY\n  time;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "基础能量消耗",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {},
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisShow": false,
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1272,7 +954,7 @@
         "h": 12,
         "w": 8,
         "x": 14,
-        "y": 39
+        "y": 24
       },
       "id": 22,
       "options": {
@@ -1342,6 +1024,7 @@
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
+            "axisShow": false,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
@@ -1373,8 +1056,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1389,9 +1071,9 @@
         "h": 12,
         "w": 7,
         "x": 0,
-        "y": 51
+        "y": 36
       },
-      "id": 14,
+      "id": 19,
       "options": {
         "legend": {
           "calcs": [],
@@ -1414,7 +1096,7 @@
           "editorMode": "code",
           "format": "time_series",
           "rawQuery": true,
-          "rawSql": "SELECT\n  (data ->> 'qty') :: float AS HRV,\n  timestamp AS time\nFROM\n  metrics\nWHERE\n  name = 'heart_rate_variability'\n  AND \"timestamp\" > $__timeFrom()\n  AND \"timestamp\" < $__timeTo()",
+          "rawSql": "SELECT\n\t(data ->> 'qty')::float AS body_fat_percentage,\n\ttimestamp AS time\nFROM\n\tmetrics\nWHERE\n\tname = 'body_fat_percentage';",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1435,7 +1117,7 @@
           }
         }
       ],
-      "title": "HRV",
+      "title": "体脂百分比",
       "type": "timeseries"
     },
     {
@@ -1450,6 +1132,7 @@
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
+            "axisShow": false,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
@@ -1460,7 +1143,7 @@
               "viz": false
             },
             "insertNulls": false,
-            "lineInterpolation": "linear",
+            "lineInterpolation": "smooth",
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
@@ -1481,8 +1164,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1497,9 +1179,9 @@
         "h": 12,
         "w": 7,
         "x": 7,
-        "y": 51
+        "y": 36
       },
-      "id": 8,
+      "id": 13,
       "options": {
         "legend": {
           "calcs": [],
@@ -1522,7 +1204,7 @@
           "editorMode": "code",
           "format": "time_series",
           "rawQuery": true,
-          "rawSql": "SELECT\n  COALESCE(AVG((data ->> 'qty') :: float), 0) AS floor,\n  generate_series(\n    date_trunc('day', min(timestamp)),\n    date_trunc('day', max(timestamp)),\n    '1 day' :: interval\n  ) AS time\nFROM\n  metrics\nWHERE\n  name = 'stair_speed_up'\n  AND \"timestamp\" > $__timeFrom()\n  AND \"timestamp\" < $__timeTo()\nGROUP BY\n  date_trunc('day', timestamp)\nORDER BY\n  time;",
+          "rawSql": "SELECT\n  COALESCE(AVG((data ->> 'qty') :: float), 0) AS kg,\n  generate_series(\n    date_trunc('day', min(timestamp)),\n    date_trunc('day', max(timestamp)),\n    '1 day' :: interval\n  ) AS time\nFROM\n  metrics\nWHERE\n  name = 'lean_body_mass'\n  AND \"timestamp\" > $__timeFrom()\n  AND \"timestamp\" < $__timeTo()\nGROUP BY\n  date_trunc('day', timestamp)\nORDER BY\n  time;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1543,7 +1225,7 @@
           }
         }
       ],
-      "title": "上楼速度",
+      "title": "去脂体重",
       "type": "timeseries"
     },
     {
@@ -1558,6 +1240,7 @@
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
+            "axisShow": false,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
@@ -1589,8 +1272,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1605,7 +1287,7 @@
         "h": 12,
         "w": 8,
         "x": 14,
-        "y": 51
+        "y": 36
       },
       "id": 3,
       "options": {
@@ -1666,6 +1348,7 @@
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
+            "axisShow": false,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
@@ -1697,8 +1380,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1713,9 +1395,9 @@
         "h": 12,
         "w": 7,
         "x": 0,
-        "y": 63
+        "y": 48
       },
-      "id": 20,
+      "id": 14,
       "options": {
         "legend": {
           "calcs": [],
@@ -1738,7 +1420,7 @@
           "editorMode": "code",
           "format": "time_series",
           "rawQuery": true,
-          "rawSql": "SELECT\n  (data ->> 'qty') :: float AS SPO,\n  timestamp AS time\nFROM\n  metrics\nWHERE\n  name = 'blood_oxygen_saturation'\n  AND \"timestamp\" > $__timeFrom()\n  AND \"timestamp\" < $__timeTo()",
+          "rawSql": "SELECT\n  (data ->> 'qty') :: float AS HRV,\n  timestamp AS time\nFROM\n  metrics\nWHERE\n  name = 'heart_rate_variability'\n  AND \"timestamp\" > $__timeFrom()\n  AND \"timestamp\" < $__timeTo()",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1759,7 +1441,7 @@
           }
         }
       ],
-      "title": "SPO",
+      "title": "HRV",
       "type": "timeseries"
     },
     {
@@ -1774,119 +1456,7 @@
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineStyle": {
-              "fill": "solid"
-            },
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "log": 2,
-              "type": "log"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 12,
-        "w": 7,
-        "x": 7,
-        "y": 63
-      },
-      "id": 11,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "timezone": ["browser"],
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "10.2.0-60477",
-      "targets": [
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "ba8c639a-57c5-41cf-a0cf-1b2463323d66"
-          },
-          "editorMode": "code",
-          "format": "time_series",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  (data ->> 'qty') :: float AS QPM,\n  timestamp AS time\nFROM\n  metrics\nWHERE\n  name = 'resting_heart_rate'\n  AND \"timestamp\" > $__timeFrom()\n  AND \"timestamp\" < $__timeTo()",
-          "refId": "A",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "limit": 50
-          }
-        }
-      ],
-      "title": "休息心率",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {},
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
+            "axisShow": false,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
@@ -1918,8 +1488,115 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 7,
+        "x": 7,
+        "y": 48
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.2.0-60477",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "ba8c639a-57c5-41cf-a0cf-1b2463323d66"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  COALESCE(AVG((data ->> 'qty') :: float), 0) AS cm,\n  generate_series(\n    date_trunc('day', min(timestamp)),\n    date_trunc('day', max(timestamp)),\n    '1 day' :: interval\n  ) AS time\nFROM\n  metrics\nWHERE\n  name = 'walking_step_length'\n  AND \"timestamp\" > $__timeFrom()\n  AND \"timestamp\" < $__timeTo()\nGROUP BY\n  date_trunc('day', timestamp)\nORDER BY\n  time;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "步行步幅",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {},
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisShow": false,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1934,7 +1611,7 @@
         "h": 12,
         "w": 8,
         "x": 14,
-        "y": 63
+        "y": 48
       },
       "id": 9,
       "options": {
@@ -1995,6 +1672,7 @@
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
+            "axisShow": false,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
@@ -2005,12 +1683,11 @@
               "viz": false
             },
             "insertNulls": false,
-            "lineInterpolation": "smooth",
+            "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
-              "log": 2,
-              "type": "log"
+              "type": "linear"
             },
             "showPoints": "auto",
             "spanNulls": false,
@@ -2027,8 +1704,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2043,9 +1719,9 @@
         "h": 12,
         "w": 7,
         "x": 0,
-        "y": 75
+        "y": 60
       },
-      "id": 17,
+      "id": 20,
       "options": {
         "legend": {
           "calcs": [],
@@ -2068,7 +1744,7 @@
           "editorMode": "code",
           "format": "time_series",
           "rawQuery": true,
-          "rawSql": "SELECT\n\t(data ->> 'qty')::float AS db,\n\ttimestamp AS time\nFROM\n\tmetrics\nWHERE\n\tname = 'environmental_audio_exposure';",
+          "rawSql": "SELECT\n  (data ->> 'qty') :: float AS SPO,\n  timestamp AS time\nFROM\n  metrics\nWHERE\n  name = 'blood_oxygen_saturation'\n  AND \"timestamp\" > $__timeFrom()\n  AND \"timestamp\" < $__timeTo()",
           "refId": "A",
           "sql": {
             "columns": [
@@ -2089,7 +1765,7 @@
           }
         }
       ],
-      "title": "环境音频暴露",
+      "title": "SPO",
       "type": "timeseries"
     },
     {
@@ -2104,6 +1780,115 @@
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
+            "axisShow": false,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 7,
+        "x": 7,
+        "y": 60
+      },
+      "id": 8,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.2.0-60477",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "ba8c639a-57c5-41cf-a0cf-1b2463323d66"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  COALESCE(AVG((data ->> 'qty') :: float), 0) AS floor,\n  generate_series(\n    date_trunc('day', min(timestamp)),\n    date_trunc('day', max(timestamp)),\n    '1 day' :: interval\n  ) AS time\nFROM\n  metrics\nWHERE\n  name = 'stair_speed_up'\n  AND \"timestamp\" > $__timeFrom()\n  AND \"timestamp\" < $__timeTo()\nGROUP BY\n  date_trunc('day', timestamp)\nORDER BY\n  time;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "上楼速度",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {},
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisShow": false,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
@@ -2135,8 +1920,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2150,8 +1934,8 @@
       "gridPos": {
         "h": 12,
         "w": 8,
-        "x": 7,
-        "y": 75
+        "x": 14,
+        "y": 60
       },
       "id": 12,
       "options": {
@@ -2212,6 +1996,231 @@
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
+            "axisShow": false,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "log": 2,
+              "type": "log"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 7,
+        "x": 0,
+        "y": 72
+      },
+      "id": 17,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.2.0-60477",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "ba8c639a-57c5-41cf-a0cf-1b2463323d66"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT\n\t(data ->> 'qty')::float AS db,\n\ttimestamp AS time\nFROM\n\tmetrics\nWHERE\n\tname = 'environmental_audio_exposure';",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "环境音频暴露",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {},
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisShow": false,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "log": 2,
+              "type": "log"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 7,
+        "x": 7,
+        "y": 72
+      },
+      "id": 11,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "timezone": [
+          "browser"
+        ],
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.2.0-60477",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "ba8c639a-57c5-41cf-a0cf-1b2463323d66"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  (data ->> 'qty') :: float AS QPM,\n  timestamp AS time\nFROM\n  metrics\nWHERE\n  name = 'resting_heart_rate'\n  AND \"timestamp\" > $__timeFrom()\n  AND \"timestamp\" < $__timeTo()",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "休息心率",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {},
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisShow": false,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
@@ -2243,8 +2252,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2258,8 +2266,8 @@
       "gridPos": {
         "h": 12,
         "w": 8,
-        "x": 15,
-        "y": 75
+        "x": 14,
+        "y": 72
       },
       "id": 18,
       "options": {
@@ -2322,8 +2330,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Declan-Health",
+  "title": "Holegots-Health",
   "uid": "e8491a61-cdac-4398-bf19-68c1c300c98f",
-  "version": 8,
+  "version": 2,
   "weekStart": ""
 }
