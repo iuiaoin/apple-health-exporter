@@ -81,21 +81,21 @@ class Workout(BaseModel):
     speed: Optional[Detail] = None
     avg_heart_rate: Optional[Detail] = None
     distance: Optional[Detail] = None
-    heart_rate_recovery = Optional[List[Detail]] = None
+    heart_rate_recovery: Optional[List[Detail]] = None
     max_heart_rate: Optional[Detail] = None
     step_cadence: Optional[Detail] = None
     is_indoor: Optional[bool] = None
     active_energy: Optional[Detail] = None
     step_count: Optional[Detail] = None
-    total_energy = Optional[Detail] = None
-    heart_rate_data = Optional[List[Detail]] = None
-    elevation = Optional[Detail] = None
-    flights_climbed = Optional[Detail] = None
-    temperature = Optional[Detail] = None
-    total_swimming_stroke_count = Optional[Detail] = None
-    swim_cadence = Optional[Detail] = None
-    humidity = Optional[Detail] = None
-    intensity = Optional[Detail] = None
+    total_energy: Optional[Detail] = None
+    heart_rate_data: Optional[List[Detail]] = None
+    elevation: Optional[Detail] = None
+    flights_climbed: Optional[Detail] = None
+    temperature: Optional[Detail] = None
+    total_swimming_stroke_count: Optional[Detail] = None
+    swim_cadence: Optional[Detail] = None
+    humidity: Optional[Detail] = None
+    intensity: Optional[Detail] = None
 class WorkoutData(BaseModel):
     workouts: List[Workout]
 class RequestWorkoutsData(BaseModel):
