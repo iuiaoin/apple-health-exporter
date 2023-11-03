@@ -40,10 +40,8 @@ class MetricTable(Base):
         }
     }
 
-
 # AUto migrate
 Base.metadata.create_all(engine)
-
 
 class Datum(BaseModel):
     date: str
@@ -62,20 +60,47 @@ class Datum(BaseModel):
     sleep_start: Optional[str] = None
     rem: Optional[float] = None
     in_bed: Optional[float] = None
-
-
 class Metric(BaseModel):
     units: str
     data: List[Datum]
     name: str
-
-
 class Data(BaseModel):
     metrics: List[Metric]
-
-
 class RequestData(BaseModel):
     data: Data
+
+
+class Detail(BaseModel):
+    units: str
+    qty: Optional[float] = None
+    date: Optional[str] = None
+class Workout(BaseModel):
+    name: str
+    start: str
+    end: str
+    speed: Optional[Detail] = None
+    avg_heart_rate: Optional[Detail] = None
+    distance: Optional[Detail] = None
+    heart_rate_recovery = Optional[List[Detail]] = None
+    max_heart_rate: Optional[Detail] = None
+    step_cadence: Optional[Detail] = None
+    is_indoor: Optional[bool] = None
+    active_energy: Optional[Detail] = None
+    step_count: Optional[Detail] = None
+    total_energy = Optional[Detail] = None
+    heart_rate_data = Optional[List[Detail]] = None
+    elevation = Optional[Detail] = None
+    flights_climbed = Optional[Detail] = None
+    temperature = Optional[Detail] = None
+    total_swimming_stroke_count = Optional[Detail] = None
+    swim_cadence = Optional[Detail] = None
+    humidity = Optional[Detail] = None
+    intensity = Optional[Detail] = None
+class WorkoutData(BaseModel):
+    workouts: List[Workout]
+class RequestWorkoutsData(BaseModel):
+    data: WorkoutData
+    
 
 
 @app.post("/upload")
@@ -94,7 +119,24 @@ def upload_data(request_data: RequestData):
         )
         session.execute(insert_ps)
         session.commit()
-    return {"status": "Data uploaded successfully!"}
+    return {"status": "Health data uploaded successfully!"}
+
+@app.post("/upload/workouts")
+def upload_workouts(request_data: RequestWorkoutsData):
+    ps = []
+    for workout in request_data.data.workouts:
+        data = workout.model_dump()
+        date = data.get("start", None)
+        ps.append(dict(name=workout.name, data=data, timestamp=date))
+    with SessionLocal() as session:
+        insert_ps = (
+            insert(MetricTable)
+            .values(ps)
+            .on_conflict_do_nothing(index_elements=["name", "timestamp"])
+        )
+        session.execute(insert_ps)
+        session.commit()
+    return {"status": "Workouts data uploaded successfully!"}
 
 
 if __name__ == "__main__":
