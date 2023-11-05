@@ -11,8 +11,18 @@ from pydantic import BaseModel
 from sqlalchemy import JSON, UUID, Column, DateTime, String, create_engine
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import declarative_base, sessionmaker
+from datetime import datetime, timezone
 
 import db  # type: ignore for timescale hook
+
+
+def convertToUTC(date_string) -> str:
+    try:
+        dt_with_tz = datetime.strptime(date_string, '%Y-%m-%d %H:%M:%S %z')
+        dt_utc = dt_with_tz.astimezone(timezone.utc)
+        return dt_utc.strftime('%Y-%m-%d %H:%M:%S %Z%z')
+    except Exception:
+        return date_string
 
 app = FastAPI()
 DATABASE_URL = os.environ.get(
@@ -45,7 +55,10 @@ Base.metadata.create_all(engine)
 
 class Datum(BaseModel):
     date: str
-    source: Optional[str] = None
+    sleepEnd: Optional[str] = None
+    inBedStart: Optional[str] = None
+    inBedEnd: Optional[str] = None
+    sleepStart: Optional[str] = None
     qty: Optional[float] = None
     Avg: Optional[float] = None
     Min: Optional[float] = None
@@ -54,12 +67,9 @@ class Datum(BaseModel):
     core: Optional[float] = None
     awake: Optional[float] = None
     asleep: Optional[float] = None
-    sleepEnd: Optional[str] = None
-    inBedStart: Optional[str] = None
-    inBedEnd: Optional[str] = None
-    sleepStart: Optional[str] = None
     rem: Optional[float] = None
     inBed: Optional[float] = None
+    source: Optional[str] = None
 class Metric(BaseModel):
     units: str
     data: List[Datum]
@@ -114,8 +124,23 @@ def upload_data(request_data: RequestData):
     for metric in request_data.data.metrics:
         for datum in metric.data:
             data = datum.model_dump()
-            date = data.pop("date", None)
-            ps.append(dict(name=metric.name, data=data, timestamp=date))
+            date = data.get("date", None)
+            sleepEnd = data.get("sleepEnd", None)
+            inBedStart = data.get("inBedStart", None)
+            inBedEnd = data.get("inBedEnd", None)
+            sleepStart = data.get("sleepStart", None)
+            if(date is not None):
+                data["date"] = convertToUTC(date)
+            if(sleepEnd is not None):
+                data["sleepEnd"] = convertToUTC(sleepEnd)
+            if(inBedStart is not None):
+                data["inBedStart"] = convertToUTC(inBedStart)
+            if(inBedEnd is not None):
+                data["inBedEnd"] = convertToUTC(inBedEnd)
+            if(sleepStart is not None):
+                data["sleepStart"] = convertToUTC(sleepStart)
+            utcDate = data.pop("date", None)
+            ps.append(dict(name=metric.name, data=data, timestamp=utcDate))
     with SessionLocal() as session:
         insert_ps = (
             insert(MetricTable)
@@ -131,6 +156,22 @@ def upload_workouts(request_data: RequestWorkoutsData):
     ps = []
     for workout in request_data.data.workouts:
         data = workout.model_dump()
+        start = data.get("start", None)
+        end = data.get("end", None)
+        heartRateRecovery = data.get("heartRateRecovery", [])
+        heartRateData = data.get("heartRateData", [])
+        if(start is not None):
+          data["start"] = convertToUTC(start)
+        if(end is not None):
+          data["end"] = convertToUTC(end)
+        for hrr in heartRateRecovery:
+            d = hrr.get("date", None)
+            if(d is not None):
+                hrr["date"] = convertToUTC(d)
+        for hrd in heartRateData:
+            d = hrd.get("date", None)
+            if(d is not None):
+                hrd["date"] = convertToUTC(d)
         date = data.get("start", None)
         ps.append(dict(name=workout.name, data=data, timestamp=date))
     with SessionLocal() as session:
