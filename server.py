@@ -75,7 +75,7 @@ class Detail(BaseModel):
     qty: Optional[float] = None
 class DetailWithDate(Detail):
     date: Optional[str] = None
-class Elevation(Detail):
+class Elevation(BaseModel):
     units: str
     ascent: Optional[float] = None
     descent: Optional[float] = None
