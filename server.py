@@ -47,19 +47,19 @@ class Datum(BaseModel):
     date: str
     source: Optional[str] = None
     qty: Optional[float] = None
-    avg: Optional[float] = None
-    min: Optional[float] = None
-    max: Optional[float] = None
+    Avg: Optional[float] = None
+    Min: Optional[float] = None
+    Max: Optional[float] = None
     deep: Optional[float] = None
     core: Optional[float] = None
     awake: Optional[float] = None
     asleep: Optional[float] = None
-    sleep_end: Optional[str] = None
-    in_bed_start: Optional[str] = None
-    in_bed_end: Optional[str] = None
-    sleep_start: Optional[str] = None
+    sleepEnd: Optional[str] = None
+    inBedStart: Optional[str] = None
+    inBedEnd: Optional[str] = None
+    sleepStart: Optional[str] = None
     rem: Optional[float] = None
-    in_bed: Optional[float] = None
+    inBed: Optional[float] = None
 class Metric(BaseModel):
     units: str
     data: List[Datum]
@@ -73,27 +73,32 @@ class RequestData(BaseModel):
 class Detail(BaseModel):
     units: str
     qty: Optional[float] = None
+class DetailWithDate(Detail):
     date: Optional[str] = None
+class Elevation(Detail):
+    units: str
+    ascent: Optional[float] = None
+    descent: Optional[float] = None
 class Workout(BaseModel):
     name: str
     start: str
     end: str
     speed: Optional[Detail] = None
-    avg_heart_rate: Optional[Detail] = None
+    avgHeartRate: Optional[Detail] = None
     distance: Optional[Detail] = None
-    heart_rate_recovery: Optional[List[Detail]] = None
-    max_heart_rate: Optional[Detail] = None
-    step_cadence: Optional[Detail] = None
-    is_indoor: Optional[bool] = None
-    active_energy: Optional[Detail] = None
-    step_count: Optional[Detail] = None
-    total_energy: Optional[Detail] = None
-    heart_rate_data: Optional[List[Detail]] = None
-    elevation: Optional[Detail] = None
-    flights_climbed: Optional[Detail] = None
+    heartRateRecovery: Optional[List[DetailWithDate]] = None
+    maxHeartRate: Optional[Detail] = None
+    stepCadence: Optional[Detail] = None
+    isIndoor: Optional[bool] = None
+    activeEnergy: Optional[Detail] = None
+    stepCount: Optional[Detail] = None
+    totalEnergy: Optional[Detail] = None
+    heartRateData: Optional[List[DetailWithDate]] = None
+    elevation: Optional[Elevation] = None
+    flightsClimbed: Optional[Detail] = None
     temperature: Optional[Detail] = None
-    total_swimming_stroke_count: Optional[Detail] = None
-    swim_cadence: Optional[Detail] = None
+    totalSwimmingStrokeCount: Optional[Detail] = None
+    swimCadence: Optional[Detail] = None
     humidity: Optional[Detail] = None
     intensity: Optional[Detail] = None
 class WorkoutData(BaseModel):
